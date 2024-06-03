@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+</head>
+<body>
+    <h1>My Notes</h1>
+    <!-- 生成筆記卡片 -->
+    <div class="container">
+        {% if not notes %}
+            <p>快加入你的第一個筆記吧！</p>
+        {% endif %}
+        {% for note in notes %}
+            <div class="note-card" onclick="openModal('{{ note[0] }}', '{{ note[1] }}', '{{ note[2] }}')">
+                <h2>{{ note[1] }}</h2>
+                <p>{{ note[2][:100] }}...</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- 下方按鈕 -->
+    <div class="bottom-buttons">
+        <button class="button-37" onclick="openAddForm()">Add Note</button>
+        <button class="button-37" onclick="openRagForm()">RAG</button>
+    </div>
+    
+    
+    <!-- 彈出新增表單 -->
+    <div class="form-popup" id="noteAddForm">
+        <form action="/add_note" method="post" class="form-container" onsubmit="return handleSubmit()"> 
+            <h2>Add Note</h2>
+            <label for="title"><b>Title</b></label>
+            <input type="text" placeholder="Enter Title" name="title" required>
+            
+            <label for="content"><b>Note</b></label>
+            <textarea name="content" placeholder="Enter Note" id="myTextarea" required></textarea>
+            
+            <button type="submit" class="btn">Add Note</button>
+            <button type="button" class="btn cancel" onclick="closeAddForm()">Close</button>
+        </form>
+    </div>
+
+    <!-- 彈出RAG表單 -->
+    <div class="form-popup" id="noteRagForm">
+        <form action="/rag_note" method="post" class="form-container" onsubmit="return handleSubmit()"> 
+            <h2>RAG</h2>
+            <textarea name="content" placeholder="輸入你想檢索的內容" id="myTextarea" required></textarea>
+            
+            <button type="submit" class="btn">Rag Note</button>
+            <button type="button" class="btn cancel" onclick="closeRagForm()">Close</button>
+        </form>
+    </div>
+
+
+    <!-- 清空資料庫按鈕 -->
+    <form action="/clear_database" method="post">
+        <input type="submit" value="Clear Database" class="clear-button">
+    </form>
+
+    <!-- 模態彈窗 -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <div class="modal-header-buttons">
+                    <span class="edit" onclick="openEditForm()">Edit</span>
+                    <span class="close"  onclick="closeModal()">&times;</span>
+                </div>
+            </div>
+            <div class="modal-body">  
+                <p id="modalContent"></p>
+            </div>
+         
+        </div>
+         <form action="/edit_note" method="post" class="form-container" id="editForm" style="display: none;">
+                    <input type="hidden" id="editId" name="id">
+                    <label for="editTitle">Title</label>
+                    <input type="text" id="editTitle" name="title" required>
+                    <label for="editContent">Content</label>
+                    <textarea id="editContent" name="content" required></textarea>
+                    <button type="submit">Save Changes</button>
+                </form>
+
+                <form action="/delete_note" method="post" class="form-container" id="deleteForm" style="display: none;">
+                    <input type="hidden" name="id" id="deleteId">
+                    <input type="submit" value="Delete Note" id="cancel">
+                </form>
+    </div>
+    
+    
+    
+    
+    
+    <script>
+        function handleSubmit() {
+            var textarea = document.getElementById('myTextarea');
+            textarea.value = textarea.value.replace( "<br/>",/\n/g);
+            return true;
+        }
+        function openAddForm() {
+            document.getElementById("noteAddForm").style.display = "block";
+        }
+
+        function closeAddForm() {
+            document.getElementById("noteAddForm").style.display = "none";
+        }
+        function openRagForm() {
+            document.getElementById("noteRagForm").style.display = "block";
+        }
+
+        function closeRagForm() {
+            document.getElementById("noteRagForm").style.display = "none";
+        }
+
+        function openModal(id, title, content) {
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalContent").innerText = content;
+            document.getElementById("noteModal").style.display = "block";
+            document.getElementById("deleteId").value = id; 
+            document.getElementById("editId").value = id; 
+            document.getElementById("editTitle").value = title; 
+            document.getElementById("editContent").value = content; 
+        }
+
+        function openEditForm() {
+            document.getElementById("editForm").style.display = "block";
+            document.getElementById("deleteForm").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("noteModal").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("noteModal")) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

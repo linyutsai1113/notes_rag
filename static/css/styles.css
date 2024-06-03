@@ -1,0 +1,244 @@
+/* static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f3f4;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
+.note-card {
+    width: calc(33.33% - 20px);
+    width: 200px; 
+    background-color: #fff;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.note-card h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+    flex: 0 1 auto;
+}
+
+.note-card p {
+    margin-top: 5px;
+    font-size: 1em;
+    color: #666;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.bottom-buttons {
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.button-37 {
+  background-color: #13aa52;
+  border: 1px solid #13aa52;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  outline: 0;
+  padding: 10px 25px;
+  text-align: center;
+  transform: translateY(0);
+  transition: transform 150ms, box-shadow 150ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-37:hover {
+  box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .button-37 {
+    padding: 10px 30px;
+  }
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    background-color: white;
+    width: 300px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.form-container {
+    max-width: 100%;
+    padding: 10px;
+    background-color: white;
+    
+}
+
+.form-container h2,b {
+    color: black;
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+.form-container input[type=text], .form-container textarea {
+    width: 90%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+    border-radius: 5px;
+    white-space: pre-wrap;
+}
+
+.form-container textarea {
+    color: black;
+    height: 100px; /* 固定高度 */
+    resize: none; /* 禁用調整大小 */
+}
+
+.form-container input[type=text]:focus, .form-container textarea:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+.form-container .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    opacity: 0.8;
+    border-radius: 5px;
+}
+
+.form-container .cancel {
+    background-color: red;
+}
+
+.form-container .btn:hover, .open-button:hover {
+    opacity: 1;
+}
+
+.clear-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.clear-button:hover {
+    background-color: #cc0000;
+}
+
+.modal {
+    color: black;
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4); 
+}
+
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    padding-top: 0px;
+    border: 1px solid #888;
+    width: 80%; 
+    max-height: 80vh; 
+    box-sizing: border-box; 
+    word-wrap: break-word; 
+    white-space: pre-wrap;
+    align-content: start;
+}
+
+.modal-body {
+    overflow-y: auto; 
+    word-wrap: break-word; 
+}
+
+
+.modal-header{
+    align-content: start;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-header-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #aaa;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+.close {
+    margin: 2px;
+    font-size: 28px;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.edit {
+    margin: 2px;
+}
+.edit:hover,
+.edit:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.edit {
+    margin: 2px;
+}
+
+
