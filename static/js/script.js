@@ -17,7 +17,6 @@ function closeRagForm() {
 
 function openDeleteForm() {
     document.getElementById("delete-alert-popup").style.display = "block";
-    document.getElementById("deleteId").value = id;
 }
 
 function closeDeleteForm() {
@@ -51,6 +50,8 @@ function openModalBySelect(id) {
             document.getElementById("modalTitle").innerText = data.title;
             document.getElementById("modalContent").innerText = data.content;
             document.getElementById("noteModal").style.display = "block";
+            document.getElementById("editTitle").value = data.title;
+            document.getElementById("editContent").value = data.content;
         });
 }
 
