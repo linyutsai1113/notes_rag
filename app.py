@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
+
 import sqlite3
 import ollama
 
@@ -39,9 +40,29 @@ def index():
     conn.close()
     notes = []
     for fetched_note in fetched_notes:
-        note = (fetched_note[0], fetched_note[1], fetched_note[2])
+        fetched_note = list(fetched_note)
+
+        fetched_note[1]= fetched_note[1].replace(')', ' ').replace('(', ' ')
+        fetched_note[2]= fetched_note[2].replace('(', ' ').replace(')', ' ')
+        note = (fetched_note[0], fetched_note[1], fetched_note[2])    
         notes.append(note)
     return render_template('index.html', notes=notes)
+
+# 搜尋筆記路由
+@app.route('/select_note', methods=['POST'])
+def select_note():
+    id = request.json['id']
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM notes WHERE id=?", (id,))
+    result = cursor.fetchone()
+    conn.close()
+
+    if result:
+        return jsonify(dict(result)), 200
+    else:
+        return jsonify({"error": "Note not found"}), 404
 
 # 新增筆記路由
 @app.route('/add_note', methods=['POST'])
