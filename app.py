@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
+import ollama
 
 app = Flask(__name__)
 
@@ -17,6 +18,17 @@ def create_table():
 
 create_table()
 
+def generate_answer_with_ollama(question_1):
+    response = ollama.chat(
+        model="phi3:3.8b-mini-128k-instruct-q4_K_M",
+        #model="yabi/breeze-7b-32k-instruct-v1_0_q4_k",
+        messages=[
+            {"role": "user", "content": question_1},
+        ]
+    )
+
+    return response["message"]["content"]
+
 # 首頁路由，顯示所有筆記
 @app.route('/')
 def index():
@@ -27,7 +39,7 @@ def index():
     conn.close()
     notes = []
     for fetched_note in fetched_notes:
-        note = (fetched_note[0], fetched_note[1], fetched_note[2].replace('<br/>', '\n'))  # 在顯示筆記時處理換行符
+        note = (fetched_note[0], fetched_note[1], fetched_note[2])
         notes.append(note)
     return render_template('index.html', notes=notes)
 
@@ -35,30 +47,33 @@ def index():
 @app.route('/add_note', methods=['POST'])
 def add_note():
     title = request.form['title']
-    content = request.form['content'].replace('<br/>', '\n')  # 處理換行符
+    content = request.form['content']
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
     c.execute("INSERT INTO notes (title, content) VALUES (?, ?)", (title, content))
     conn.commit()
     conn.close()
     return redirect('/')
+
 # RAG筆記路由
 @app.route('/rag_note', methods=['POST'])
 def rag_note():
-    content = request.form['content'].replace('<br/>', '\n')  # 處理換行符
+    question_1 = request.form['question_1']
+    
+    answer = generate_answer_with_ollama(question_1)
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    c.execute("INSERT INTO notes ( content) VALUES ( ?)", (content))
+    c.execute("INSERT INTO notes (title, content) VALUES (?, ?)", ('RAG Generated Note', answer))
     conn.commit()
     conn.close()
     return redirect('/')
 
-# 修改筆記的路由
+# 修改筆記路由
 @app.route('/edit_note', methods=['POST'])
 def edit_note():
     note_id = request.form['id']
     title = request.form['title']
-    content = request.form['content'].replace('\n', '<br/>')  # 處理換行符
+    content = request.form['content']
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
     c.execute("UPDATE notes SET title=?, content=? WHERE id=?", (title, content, note_id))
@@ -88,4 +103,4 @@ def clear_database():
     return redirect('/')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=5500)

@@ -7,7 +7,7 @@
     <title>Notes App</title>
 </head>
 <body>
-    <h1>My Notes</h1>
+    <h1>My Notes RAG</h1>
     <!-- 生成筆記卡片 -->
     <div class="container">
         {% if not notes %}
@@ -23,10 +23,13 @@
     
     <!-- 下方按鈕 -->
     <div class="bottom-buttons">
+        <div style="">
+            <button class="button-37" onclick="ClearAlert()" style="background-color: red; border: red;">Clear all notes</button>
+        </div>
+        
         <button class="button-37" onclick="openAddForm()">Add Note</button>
         <button class="button-37" onclick="openRagForm()">RAG</button>
     </div>
-    
     
     <!-- 彈出新增表單 -->
     <div class="form-popup" id="noteAddForm">
@@ -47,18 +50,26 @@
     <div class="form-popup" id="noteRagForm">
         <form action="/rag_note" method="post" class="form-container" onsubmit="return handleSubmit()"> 
             <h2>RAG</h2>
-            <textarea name="content" placeholder="輸入你想檢索的內容" id="myTextarea" required></textarea>
+            <label for="question_1"><b>Question 1</b></label>
+            <textarea name="question_1" placeholder="輸入第一個問題" required></textarea>
+
             
             <button type="submit" class="btn">Rag Note</button>
             <button type="button" class="btn cancel" onclick="closeRagForm()">Close</button>
         </form>
     </div>
 
-
     <!-- 清空資料庫按鈕 -->
-    <form action="/clear_database" method="post">
-        <input type="submit" value="Clear Database" class="clear-button">
-    </form>
+    <div class="alert-popup-modal"  id="alert-popup">
+        <form action="/clear_database" method="post" class="alert-popup-content">
+            <h2>Are you sure you want to clear all notes?</h2>
+            <p>This action cannot be undone.</p>
+            <div style="display: flex; justify-content: space-evenly; margin-top: 20px;">
+                <button type="submit" onclick="closeAlert()" class="button-37" style="background-color: red; border: red;">Yes</button>
+                <button type="button"  onclick="closeAlert()" class="button-37 " >Close</button>
+            </div>
+        </form>
+    </div>
 
     <!-- 模態彈窗 -->
     <div id="noteModal" class="modal">
@@ -73,72 +84,19 @@
             <div class="modal-body">  
                 <p id="modalContent"></p>
             </div>
-         
         </div>
-         <form action="/edit_note" method="post" class="form-container" id="editForm" style="display: none;">
-                    <input type="hidden" id="editId" name="id">
-                    <label for="editTitle">Title</label>
-                    <input type="text" id="editTitle" name="title" required>
-                    <label for="editContent">Content</label>
-                    <textarea id="editContent" name="content" required></textarea>
-                    <button type="submit">Save Changes</button>
-                </form>
 
-                <form action="/delete_note" method="post" class="form-container" id="deleteForm" style="display: none;">
-                    <input type="hidden" name="id" id="deleteId">
-                    <input type="submit" value="Delete Note" id="cancel">
-                </form>
+         <form action="/edit_note" method="post" class="form-container" id="editForm" style="display: none;justify-content: center;">
+            <input type="hidden" id="editId" name="id">
+            <label for="editTitle">Title</label>
+            <input type="text" id="editTitle" name="title" required>
+            <label for="editContent">Content</label>
+            <textarea id="editContent" name="content" required></textarea>
+            <button type="submit" class="btn">Save</button>
+            <button type="button" class="btn cancel" onclick="closeEditForm()">Close</button>
+        </form>
     </div>
-    
-    
-    
-    
-    
-    <script>
-        function handleSubmit() {
-            var textarea = document.getElementById('myTextarea');
-            textarea.value = textarea.value.replace( "<br/>",/\n/g);
-            return true;
-        }
-        function openAddForm() {
-            document.getElementById("noteAddForm").style.display = "block";
-        }
 
-        function closeAddForm() {
-            document.getElementById("noteAddForm").style.display = "none";
-        }
-        function openRagForm() {
-            document.getElementById("noteRagForm").style.display = "block";
-        }
-
-        function closeRagForm() {
-            document.getElementById("noteRagForm").style.display = "none";
-        }
-
-        function openModal(id, title, content) {
-            document.getElementById("modalTitle").innerText = title;
-            document.getElementById("modalContent").innerText = content;
-            document.getElementById("noteModal").style.display = "block";
-            document.getElementById("deleteId").value = id; 
-            document.getElementById("editId").value = id; 
-            document.getElementById("editTitle").value = title; 
-            document.getElementById("editContent").value = content; 
-        }
-
-        function openEditForm() {
-            document.getElementById("editForm").style.display = "block";
-            document.getElementById("deleteForm").style.display = "block";
-        }
-
-        function closeModal() {
-            document.getElementById("noteModal").style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == document.getElementById("noteModal")) {
-                closeModal();
-            }
-        }
-    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
