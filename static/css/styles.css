@@ -14,7 +14,7 @@ body {
 .note-card {
     width: calc(33.33% - 20px);
     width: 200px; 
-    background-color: #fff;
+    background-color: #ffffff;
     margin: 10px;
     padding: 15px;
     border-radius: 8px;
@@ -29,6 +29,12 @@ body {
     margin-top: 0;
     font-size: 1.2em;
     flex: 0 1 auto;
+    display: -webkit-box; /* 使用彈性盒子模型 */
+    -webkit-line-clamp: 3; /* 限制顯示的行數 */
+    -webkit-box-orient: vertical; /* 垂直排列盒子 */
+    overflow: hidden; /* 隱藏超出部分 */
+    text-overflow: ellipsis; /* 顯示省略號 */
+    word-wrap: break-word; /* 碰到邊界自動換行 */
 }
 
 .note-card p {
@@ -102,9 +108,9 @@ body {
 }
 
 .form-container {
-    max-width: 100%;
     padding: 10px;
     background-color: white;
+    
     
 }
 
@@ -115,7 +121,7 @@ body {
 }
 
 .form-container input[type=text], .form-container textarea {
-    width: 90%;
+    width: 97.5%;
     padding: 15px;
     margin: 5px 0 22px 0;
     border: none;
