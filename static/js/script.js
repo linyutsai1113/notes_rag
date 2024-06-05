@@ -61,9 +61,14 @@ function closeModal() {
 
 function openEditForm() {
     document.getElementById("editForm").style.display = "block";
+    document.getElementById("editModal").style.display = "block";
+    document.getElementById("orgModal").style.display = "none";
+
 }
 
 function closeEditForm() {
+    document.getElementById("editModal").style.display = "none";
+    document.getElementById("orgModal").style.display = "block";
     document.getElementById("editForm").style.display = "none";
 }
 
