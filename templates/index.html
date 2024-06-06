@@ -14,7 +14,7 @@
             <p>快加入你的第一個筆記吧！</p>
         {% endif %}
         {% for note in notes %}
-            <div class="note-card"  onclick="openModalBySelect({{ note[0] }})">
+            <div class="note-card"  onclick="openModalBySelect( '{{note[0]}}' )">
                 <h2>{{ note[1] }}</h2>
                 <p>{{ note[2][:100] }}...</p>
             </div>
