@@ -73,7 +73,7 @@ def rag_note():
     collection.add(
         ids=[ids],
         embeddings=[ollama.embeddings(model="mxbai-embed-large", prompt=answer)["embedding"]],
-        documents=[f"{ids},RAG Generated Note,{answer}"]
+        documents=[f"{ids},{question} — by RAG,{answer}"]
     )
     return redirect('/')
 

@@ -1,5 +1,6 @@
 
 function openAddForm() {
+    closeRagForm()
     document.getElementById("noteAddForm").style.display = "block";
 }
 
@@ -8,6 +9,7 @@ function closeAddForm() {
 }
 
 function openRagForm() {
+    closeAddForm()
     document.getElementById("noteRagForm").style.display = "block";
 }
 
