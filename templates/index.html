@@ -74,31 +74,39 @@
 
     <!-- 模態彈窗 -->
     <div id="noteModal" class="modal">
-        
         <div class="modal-content" id="orgModal">
-            
             <div class="modal-header">
                 <h2 id="modalTitle"></h2>
-                <div class="modal-header-buttons">
-                    <span class="edit" onclick="openEditForm()">Edit</span>
-                    <span class="close"  onclick="closeModal()">&times;</span>
-                </div>
+                <span class="close"  onclick="closeModal()">&times;</span>
             </div>
+            
             <div class="modal-body">  
                 <p id="modalContent"></p>
-                
             </div>
-
+            <div class="modal-footer">
+                <span class="edit" onclick="openEditForm()">Edit</span>
+            </div>
         </div>
+
         <div class="modal-content" style="display: none; " id = "editModal">
-             <form action="/edit_note" method="post" class="form-container" id="editForm" style="display: none;justify-content: center;">
-                <input type="hidden" id="editId" name="id">
-                <input type="text" id="editTitle" name="title" required>
-                <textarea id="editContent" name="content" required></textarea>
-                <button type="submit" class="btn">Save</button>
-                <button type="button" class="btn cancel" style="background-color: royalblue; border: royalblue;" onclick="closeEditForm()">Close</button>
-                <button type="button" class="btn cancel" onclick="openDeleteForm()">Delete</button>
+            <form action="/edit_note" method="post" class="form-container" id="editForm" style="display: none; justify-content: center; position: relative;">
+                <div class="edit-header">
+                    <input type="hidden" id="editId" name="id">
+                    <label for="title"><b>Title</b></label>
+                    <input type="text" id="editTitle" name="title" required>
+                    <span class="close" onclick="closeEditForm()" style="position: absolute; top: 0; right: 0; cursor: pointer;">&times;</span>
+                </div>
+            
+                <div class="edit-body">  
+                    <label for="content"><b>Note</b></label>
+                    <textarea id="editContent" name="content" required></textarea>
+                    <div style="display: flex; justify-content: space-evenly;">
+                        <button type="submit" class="button-37">Save</button>
+                        <button type="button" class="button-37" style="background-color: red; border: red;" onclick="openDeleteForm()">Delete</button>    
+                    </div>
+                </div>  
             </form>
+            
         </div>
        
          
