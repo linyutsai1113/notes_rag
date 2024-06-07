@@ -49,6 +49,9 @@ function openModalBySelect(id) {
     })
         .then(response => response.json())
         .then(data => {
+            closeAddForm()
+            closeRagForm()
+            closeRagResultForm()
             document.getElementById("modalTitle").innerText = data.title;
             document.getElementById("modalContent").innerText = data.content;
             document.getElementById("noteModal").style.display = "block";
@@ -80,4 +83,86 @@ function ClearAlert() {
 
 function closeAlert() {
     document.getElementById("alert-popup").style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 绑定RAG表单的提交事件
+    const ragForm = document.getElementById("ragForm");
+    if (ragForm) {
+        ragForm.addEventListener("submit", handleRagFormSubmit);
+    }
+});
+
+function handleRagFormSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const question = form.question_1.value;
+
+    // 显示加载消息
+    document.getElementById("loadingMessage").style.display = "block";
+
+    fetch('/rag_note', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            question_1: question,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        document.getElementById("loadingMessage").style.display = "none";
+
+        if (data.error) {
+            alert(data.error);
+        } else {
+            document.getElementById("resultQuestion").value = data.question;
+            document.getElementById("resultAnswer").value = data.answer;
+            document.getElementById("noteRagResultForm").style.display = "block";
+            enable_all_buttons();
+        }
+    })
+    .catch(error => {
+        // 隐藏加载消息
+        document.getElementById("loadingMessage").style.display = "none";
+        console.error('Error:', error);
+    });
+}
+
+function closeRagResultForm() {
+    document.getElementById("noteRagResultForm").style.display = "none";
+}
+
+function openRagForm() {
+    closeAddForm()
+    closeRagResultForm()
+    document.getElementById("noteRagForm").style.display = "block";
+}
+
+function closeRagForm() {
+    document.getElementById("noteRagForm").style.display = "none";
+}
+
+function disable_all_buttons() {
+    document.getElementById("addButton").disabled = true;
+    document.getElementById("editButton").disabled = true;
+    document.getElementById("clearButton").disabled = true;
+    document.getElementById("ragButton").disabled = true;
+    document.getElementById("saveButton").disabled = true;
+    document.getElementById("deleteButton").disabled = true;
+}
+
+function rag_button() {
+    disable_all_buttons();
+    closeRagForm();
+}
+function enable_all_buttons() {
+    document.getElementById("addButton").disabled = false;
+    document.getElementById("editButton").disabled = false;false
+    document.getElementById("clearButton").disabled = false;
+    document.getElementById("ragButton").disabled = false;
+    document.getElementById("saveButton").disabled = false;
+    document.getElementById("deleteButton").disabled = false;
 }

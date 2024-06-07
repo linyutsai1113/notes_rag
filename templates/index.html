@@ -8,6 +8,10 @@
 </head>
 <body>
     <h1>My Notes RAG</h1>
+    <div id="loadingMessage" style="display:none;">
+        <p class="loading-message-animate">生成結果中，請稍候...</p>
+    </div>
+    
     <!-- 生成筆記卡片 -->
     <div class="container">
         {% if not notes %}
@@ -18,23 +22,25 @@
                 <h2>{{ note[1] }}</h2>
                 <p>{{ note[2][:100] }}...</p>
             </div>
-            
         {% endfor %}
     </div>
+
+
     
     <!-- 下方按鈕 -->
     <div class="bottom-buttons">
-        <div style="">
-            <button class="button-37" onclick="ClearAlert()" style="background-color: red; border: red;">Clear all notes</button>
+        <div>
+            <button id = "clearButton" class="button-37" onclick="ClearAlert()" style="background-color: red; border: red;">Clear all notes</button>
         </div>
         
-        <button class="button-37" onclick="openAddForm()">Add Note</button>
-        <button class="button-37" onclick="openRagForm()">RAG</button>
+        <button id = "addButton" class="button-37" onclick="openAddForm()">Add Note</button>
+        <button id = "ragButton" class="button-37" onclick="openRagForm()">RAG</button>
     </div>
     
     <!-- 彈出新增表單 -->
     <div class="form-popup" id="noteAddForm">
-        <form action="/add_note" method="post" class="form-container" onsubmit="return handleSubmit()"> 
+
+        <form action="/add_note" method="post" class="form-container" > 
             <h2>Add Note</h2>
             <label for="title"><b>Title</b></label>
             <input type="text" placeholder="Enter Title" name="title" required>
@@ -49,16 +55,33 @@
 
     <!-- 彈出RAG表單 -->
     <div class="form-popup" id="noteRagForm">
-        <form action="/rag_note" method="post" class="form-container" onsubmit="return handleSubmit()"> 
+        <form id="ragForm" class="form-container">
             <h2>RAG</h2>
             <label for="question_1"><b>Question</b></label>
             <textarea name="question_1" placeholder="輸入第一個問題" required></textarea>
-
-            
-            <button type="submit" class="btn">Rag Note</button>
+            <button type="submit" class="btn" onclick="rag_button()">RAG Note</button>
             <button type="button" class="btn cancel" onclick="closeRagForm()">Close</button>
         </form>
     </div>
+
+
+    <!-- 彈出RAG結果表單 -->
+    <div class="form-popup" id="noteRagResultForm">
+        <form class="form-container">
+            <h2>RAG Result</h2>
+            <div >
+                <label for="resultQuestion"><b>Question</b></label>
+                <input id="resultQuestion" readonly style="border: none; width: 100%;  padding: 12px 20px;  margin: 8px 0;  box-sizing: border-box; background-color: #f1f1f1;;"></textarea>
+            </div>
+            
+            <label for="resultAnswer"><b>Answer</b></label>
+            <textarea id="resultAnswer" readonly></textarea>
+            <button type="button" class="btn cancel" onclick="closeRagResultForm()">Close</button>
+        </form>
+    </div>
+
+
+
 
     <!-- 清空資料庫按鈕 -->
     <div class="alert-popup-modal"  id="alert-popup">
@@ -84,7 +107,7 @@
                 <p id="modalContent"></p>
             </div>
             <div class="modal-footer">
-                <span class="edit" onclick="openEditForm()">Edit</span>
+                <span id="editButton" class="edit" onclick="openEditForm()">Edit</span>
             </div>
         </div>
 
@@ -101,8 +124,8 @@
                     <label for="content"><b>Note</b></label>
                     <textarea id="editContent" name="content" required></textarea>
                     <div style="display: flex; justify-content: space-evenly;">
-                        <button type="submit" class="button-37">Save</button>
-                        <button type="button" class="button-37" style="background-color: red; border: red;" onclick="openDeleteForm()">Delete</button>    
+                        <button id = "saveButton" type="submit" class="button-37">Save</button>
+                        <button id = "deleteButton"type="button" class="button-37" style="background-color: red; border: red;" onclick="openDeleteForm()">Delete</button>    
                     </div>
                 </div>  
             </form>

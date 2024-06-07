@@ -3,6 +3,7 @@ import ollama
 import chromadb
 import uuid
 
+
 app = Flask(__name__)
 
 # 連接 ChromaDB 資料庫
@@ -67,15 +68,15 @@ def add_note():
 
 @app.route('/rag_note', methods=['POST'])
 def rag_note():
-    ids = str(uuid.uuid4())
+    #ids = str(uuid.uuid4())
     question = request.form['question_1']
     answer = generate_answer_with_ollama(question)
-    collection.add(
-        ids=[ids],
-        embeddings=[ollama.embeddings(model="mxbai-embed-large", prompt=answer)["embedding"]],
-        documents=[f"{ids},{question} — by RAG,{answer}"]
-    )
-    return redirect('/')
+   #collection.add(
+   #    ids=[ids],
+   #    embeddings=[ollama.embeddings(model="mxbai-embed-large", prompt=answer)["embedding"]],
+   #    documents=[f"{ids},{question} — by RAG,{answer}"]
+   #)
+    return jsonify({"question": question, "answer": answer}), 200
 
 @app.route('/edit_note', methods=['POST'])
 def edit_note():
@@ -106,3 +107,5 @@ def clear_database():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5500)
+    #from waitress import serve
+    #serve(app, host="0.0.0.0", port=5500)

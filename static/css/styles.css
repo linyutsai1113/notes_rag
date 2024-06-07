@@ -303,5 +303,23 @@ body {
     float: end;
 }
 
+.loading-message-animate {
+    animation-name: loading-message-animation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+  
+@keyframes loading-message-animation {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(10px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
 
 
