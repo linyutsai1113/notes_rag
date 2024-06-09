@@ -152,6 +152,7 @@ function disable_all_buttons() {
     document.getElementById("ragButton").disabled = true;
     document.getElementById("saveButton").disabled = true;
     document.getElementById("deleteButton").disabled = true;
+    document.getElementById("pdfButton").disabled = true;
 }
 
 function rag_button() {
@@ -165,6 +166,7 @@ function enable_all_buttons() {
     document.getElementById("ragButton").disabled = false;
     document.getElementById("saveButton").disabled = false;
     document.getElementById("deleteButton").disabled = false;
+    document.getElementById("pdfButton").disabled = false;
 }
 
 document.getElementById('pdfButton').addEventListener('click', () => {
@@ -195,7 +197,7 @@ function uploadPDF() {
             alert("Error: " + data.error);
         } else {
             console.log("Extracted Text: ", data.text);
-            alert("PDF text extracted successfully. Check the console for details.");
+            alert("PDF uploaded successfully. Please wait a few seconds for embedding the text into the note.");
             fetch('/add_note', {
             method: 'POST',
             headers: {
