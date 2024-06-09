@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, jsonify
 import ollama
 import chromadb
 import uuid
-
+import fitz
 
 app = Flask(__name__)
 
@@ -65,6 +65,28 @@ def add_note():
         documents=[f"{ids},{title},{content}"]
     )
     return redirect('/')
+
+@app.route('/read_pdf', methods=['POST'])
+def read_pdf():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    try:
+
+        pdf_document = fitz.open(stream=file.read(), filetype="pdf")
+        text = ""
+
+        for page_num in range(len(pdf_document)):
+            page = pdf_document.load_page(page_num)
+            text += page.get_text()
+        
+        return jsonify({"text": text}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
 
 @app.route('/rag_note', methods=['POST'])
 def rag_note():

@@ -92,6 +92,17 @@ body {
     padding: 10px 30px;
   }
 }
+.rag_form_input {
+    border: none;
+    border-color: none; 
+    border-width: 0;
+    width: 100%;  
+    padding: 12px 20px;  
+    margin: 8px 0;  
+    box-sizing: border-box; 
+    background-color: #f1f1f1;
+
+}
 
 .form-popup {
     display: none;

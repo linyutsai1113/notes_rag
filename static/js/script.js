@@ -166,3 +166,53 @@ function enable_all_buttons() {
     document.getElementById("saveButton").disabled = false;
     document.getElementById("deleteButton").disabled = false;
 }
+
+document.getElementById('pdfButton').addEventListener('click', () => {
+    document.getElementById('pdfFile').click();
+});
+
+document.getElementById('pdfFile').addEventListener('change', uploadPDF);
+
+function uploadPDF() {
+    const fileInput = document.getElementById('pdfFile');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select a PDF file first.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/read_pdf', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert("Error: " + data.error);
+        } else {
+            console.log("Extracted Text: ", data.text);
+            alert("PDF text extracted successfully. Check the console for details.");
+            fetch('/add_note', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                title: file.name,
+                content: data.text,
+            }),
+        })
+        }
+        
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred while uploading the PDF.");
+    });
+
+}
+

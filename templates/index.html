@@ -32,7 +32,8 @@
         <div>
             <button id = "clearButton" class="button-37" onclick="ClearAlert()" style="background-color: red; border: red;">Clear all notes</button>
         </div>
-        
+        <input type="file" id="pdfFile" accept="application/pdf" style="display: none;">
+        <button id="pdfButton" class="button-37" onclick="uploadPdf()">Upload PDF</button>
         <button id = "addButton" class="button-37" onclick="openAddForm()">Add Note</button>
         <button id = "ragButton" class="button-37" onclick="openRagForm()">RAG</button>
     </div>
@@ -71,7 +72,7 @@
             <h2>RAG Result</h2>
             <div >
                 <label for="resultQuestion"><b>Question</b></label>
-                <input id="resultQuestion" readonly style="border: none; width: 100%;  padding: 12px 20px;  margin: 8px 0;  box-sizing: border-box; background-color: #f1f1f1;;"></textarea>
+                <input id="resultQuestion" readonly class="rag_form_input"></textarea>
             </div>
             
             <label for="resultAnswer"><b>Answer</b></label>
@@ -152,7 +153,12 @@
     
 
     <script src="{{ url_for('static', filename='js/script.js') }}">
-        
+        document.getElementById('selectButton').addEventListener('click', () => {
+            document.getElementById('pdfFile').click();
+        });
+
+        document.getElementById('pdfFile').addEventListener('change', uploadPDF);
+
     </script>
 </body>
 </html>
