@@ -8,7 +8,7 @@
 
 `git clone https://github.com/linyutsai1113/notes_rag.git`
 
-...
+---
 
 
 
@@ -22,7 +22,7 @@
 
 `pip install -r requirements.txt`
 
-...
+---
 
 
 
@@ -35,8 +35,7 @@
 
 `ollama pull mxbai-embed-large`
 
-...
-
+---
 
 
 
