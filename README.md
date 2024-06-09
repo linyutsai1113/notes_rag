@@ -7,6 +7,7 @@
 ##### Use git：
 
 `git clone https://github.com/linyutsai1113/notes_rag.git`
+
 --
 
 
@@ -21,6 +22,7 @@
 
 `pip install -r requirements.txt`
 
+--
 
 
 
@@ -32,6 +34,8 @@
 `ollama pull phi3:3.8b-mini-128k-instruct-q4_K_M`
 
 `ollama pull mxbai-embed-large`
+
+--
 
 
 
