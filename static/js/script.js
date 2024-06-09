@@ -197,24 +197,36 @@ function uploadPDF() {
             alert("Error: " + data.error);
         } else {
             console.log("Extracted Text: ", data.text);
+            
             alert("PDF uploaded successfully. Please wait a few seconds for embedding the text into the note.");
             fetch('/add_note', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                title: file.name,
-                content: data.text,
-            }),
-        })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    title: file.name,
+                    content: data.text,
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Note added successfully!");
+                    location.reload();  // 重新整理頁面
+                } else {
+                    alert("Failed to add the note.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while adding the note.");
+            });
         }
-        
     })
     .catch(error => {
         console.error("Error:", error);
         alert("An error occurred while uploading the PDF.");
     });
-
 }
+
 
