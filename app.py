@@ -29,7 +29,7 @@ def generate_answer_with_ollama(question):
     data = results['documents']
     output = ollama.generate(
         model="phi3:3.8b-mini-128k-instruct-q4_K_M",
-        prompt=f"使用這些內容: {data}. 回應這個prompt: {prompt}"
+        prompt=f"使用這些內容: {data}. 回應這個prompt: {prompt}，生成大約100字的內容。"
     )
     return output["response"]
 

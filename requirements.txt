@@ -2,3 +2,4 @@ flask
 ollama
 chromadb
 waitress
+pymupdf
