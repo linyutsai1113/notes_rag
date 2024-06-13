@@ -1,5 +1,7 @@
 ## 基本教學
 
+
+
 ### 下載程式檔案
 
 ##### Use git：
@@ -7,6 +9,8 @@
 `git clone https://github.com/linyutsai1113/notes_rag.git`
 
 ---
+
+
 
 ### 建立python 環境
 
@@ -19,6 +23,7 @@
 `pip install -r requirements.txt`
 
 ---
+
 
 
 
