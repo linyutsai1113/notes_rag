@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, jsonify
+from utils.use_model import generate_answer_with_ollama
 import ollama
 import chromadb
 import uuid
@@ -10,28 +11,6 @@ app = Flask(__name__)
 client = chromadb.PersistentClient("vector_embedding_db")
 collection = client.get_or_create_collection("embedding_db", metadata={"key": "value"})
 
-
-def generate_answer_with_ollama(question):
-    prompt = f"""\
-        你是一個專業的訊息檢索人員，根據過去的內容而非事先知識，回答問題，不知道就說不知道。
-        以下是一些示例。
-        查詢: {question}
-        回答:
-    """
-    response = ollama.embeddings(
-        prompt=question,
-        model="mxbai-embed-large"
-    )
-    results = collection.query(
-        query_embeddings=[response["embedding"]],
-        n_results=1
-    )
-    data = results['documents']
-    output = ollama.generate(
-        model="phi3:3.8b-mini-128k-instruct-q4_K_M",
-        prompt=f"使用這些內容: {data}. 回應這個prompt: {prompt}，生成大約100字的內容。"
-    )
-    return output["response"]
 
 @app.route('/')
 def index():
@@ -90,14 +69,15 @@ def read_pdf():
 
 @app.route('/rag_note', methods=['POST'])
 def rag_note():
-    #ids = str(uuid.uuid4())
+    collection = client.get_or_create_collection("rag_history", metadata={"key": "value"})
+    ids = str(uuid.uuid4())
     question = request.form['question_1']
     answer = generate_answer_with_ollama(question)
-   #collection.add(
-   #    ids=[ids],
-   #    embeddings=[ollama.embeddings(model="mxbai-embed-large", prompt=answer)["embedding"]],
-   #    documents=[f"{ids},{question} — by RAG,{answer}"]
-   #)
+    collection.add(
+        ids=[ids],
+        embeddings=[ollama.embeddings(model="mxbai-embed-large", prompt=f"{question} — by RAG,{answer}")["embedding"]],
+        documents=[f"{ids},{question},{answer}"]
+    )
     return jsonify({"question": question, "answer": answer}), 200
 
 @app.route('/edit_note', methods=['POST'])
@@ -126,6 +106,22 @@ def clear_database():
     for each in collection.get()['documents']:
         collection.delete(ids=[each.split(',')[0]])
     return redirect('/')
+
+@app.route('/rag_history')
+def rag_history():
+    collection = client.get_or_create_collection("rag_history", metadata={"key": "value"})
+    documents = collection.get()['documents']
+    rag_data = []
+    for doc in documents:
+        parts = doc.split(",")
+        entry = {
+                "id": parts[0],
+                "question": parts[1],
+                "answer": parts[2],
+            }
+        rag_data.append(entry)
+        
+    return render_template('rag_history.html', rag_data=rag_data)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5500)

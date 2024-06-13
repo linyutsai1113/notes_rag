@@ -98,7 +98,6 @@ function handleRagFormSubmit(event) {
     const form = event.target;
     const question = form.question_1.value;
 
-    // 显示加载消息
     document.getElementById("loadingMessage").style.display = "block";
 
     fetch('/rag_note', {
@@ -125,7 +124,6 @@ function handleRagFormSubmit(event) {
         }
     })
     .catch(error => {
-        // 隐藏加载消息
         document.getElementById("loadingMessage").style.display = "none";
         console.error('Error:', error);
     });
@@ -229,4 +227,15 @@ function uploadPDF() {
     });
 }
 
-
+function openRagHistory() {
+    fetch('/rag_history')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById('ragHistoryContent').innerHTML = data;
+        })
+}

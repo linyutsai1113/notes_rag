@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RAG History</title>
+</head>
+<body>
+    <h1>RAG HISTORY</h1>
+    <table>
+        <tr>
+            <th>Question</th>
+            <th>Answer</th>
+        </tr>
+        {% for entry in rag_data %}
+            <tr>
+                <td>{{ entry.question }}</td>
+                <td>{{ entry.answer }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="/">返回首頁</a>
+</body>
+</html>
