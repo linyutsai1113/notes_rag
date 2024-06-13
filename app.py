@@ -23,6 +23,8 @@ def index():
 
 @app.route('/select_note', methods=['POST'])
 def select_note():
+    collection_name = request.json['collection_name']
+    collection = client.get_or_create_collection( collection_name, metadata={"key": "value"})
     note_id = request.json['id']
     results = collection.get(ids=[note_id])
     if results["documents"]:
@@ -82,6 +84,8 @@ def rag_note():
 
 @app.route('/edit_note', methods=['POST'])
 def edit_note():
+    collection_name = request.form['collection_name']
+    collection = client.get_or_create_collection( collection_name, metadata={"key": "value"})
     note_id = request.form['id']
     title = request.form['title']
     content = request.form['content']
@@ -94,6 +98,8 @@ def edit_note():
 
 @app.route('/delete_note', methods=['POST'])
 def delete_note():
+    collection_name = request.form['collection_name']
+    collection = client.get_or_create_collection( collection_name, metadata={"key": "value"})
     note_id = request.form['id']
     try:
         collection.delete(ids=[note_id])
@@ -103,6 +109,8 @@ def delete_note():
 
 @app.route('/clear_database', methods=['POST'])
 def clear_database():
+    collection_name = request.form['collection_name']
+    collection = client.get_or_create_collection( collection_name, metadata={"key": "value"})
     for each in collection.get()['documents']:
         collection.delete(ids=[each.split(',')[0]])
     return redirect('/')

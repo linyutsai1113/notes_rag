@@ -19,7 +19,7 @@
             <p>快加入你的第一個筆記吧！</p>
         {% endif %}
         {% for note in notes %}
-            <div class="note-card"  onclick="openModalBySelect( '{{note[0]}}' )">
+            <div class="note-card"  onclick="openModalBySelect( '{{note[0]}}','embedding_db' )">
                 <h2>{{ note[1] }}</h2>
                 <p>{{ note[2][:100] }}...</p>
             </div>
@@ -89,9 +89,11 @@
     <!-- 清空資料庫按鈕 -->
     <div class="alert-popup-modal"  id="alert-popup">
         <form action="/clear_database" method="post" class="alert-popup-content">
+            <input type="hidden" name="collection_name" value="embedding_db">
             <h2>Are you sure you want to clear all notes?</h2>
             <p>This action cannot be undone.</p>
             <div style="display: flex; justify-content: space-evenly; margin-top: 20px;">
+                
                 <button type="submit" onclick="closeAlert()" class="button-37" style="background-color: red; border: red;">Yes</button>
                 <button type="button"  onclick="closeAlert()" class="button-37 " >Close</button>
             </div>
@@ -116,6 +118,7 @@
 
         <div class="modal-content" style="display: none; " id = "editModal">
             <form action="/edit_note" method="post" class="form-container" id="editForm" style="display: none; justify-content: center; position: relative;">
+                <input type="hidden" name="collection_name" value="embedding_db">
                 <div class="edit-header">
                     <input type="hidden" id="editId" name="id">
                     <label for="title"><b>Title</b></label>
@@ -140,6 +143,7 @@
         <div class="alert-popup-modal"  id="delete-alert-popup">
             <form action="/delete_note" method="post" class="alert-popup-content">
                 <input type="hidden" id="deleteId" name="id">
+                <input type="hidden" name="collection_name" value="embedding_db">
                 <h2>Are you sure you want to delete this note?</h2>
                 <p>This action cannot be undone.</p>
                 <div style="display: flex; justify-content: space-evenly; margin-top: 20px;">

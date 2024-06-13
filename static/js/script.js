@@ -36,7 +36,7 @@ function openModal(id, title, content) {
 }
 
 
-function openModalBySelect(id) {
+function openModalBySelect(id, collection_name) {
     document.getElementById("editId").value = id;
     document.getElementById("deleteId").value = id;
     document.getElementById("selectId").value = id;
@@ -45,13 +45,10 @@ function openModalBySelect(id) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ "id": id }),
+        body: JSON.stringify({ "id": id ,"collection_name": collection_name }),
     })
         .then(response => response.json())
         .then(data => {
-            closeAddForm()
-            closeRagForm()
-            closeRagResultForm()
             document.getElementById("modalTitle").innerText = data.title;
             document.getElementById("modalContent").innerText = data.content;
             document.getElementById("noteModal").style.display = "block";
@@ -59,6 +56,8 @@ function openModalBySelect(id) {
             document.getElementById("editContent").value = data.content;
         });
 }
+
+
 
 function closeModal() {
     document.getElementById("noteModal").style.display = "none";
@@ -86,7 +85,6 @@ function closeAlert() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 绑定RAG表单的提交事件
     const ragForm = document.getElementById("ragForm");
     if (ragForm) {
         ragForm.addEventListener("submit", handleRagFormSubmit);
